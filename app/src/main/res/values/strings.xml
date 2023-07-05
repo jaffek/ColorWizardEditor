@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Color Wizard Editor</string>
+    <string name="pick_image">Choose image to edit</string>
+    <string name="open_image">Open image</string>
+</resources>
