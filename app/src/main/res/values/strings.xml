@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Color Wizard Editor</string>
-    <string name="pick_image">Choose image to edit</string>
+    <string name="pick_image">Select image to edit</string>
     <string name="open_image">Open image</string>
+    <string name="select_copy_color">Select image to copy color from:</string>
+    <string name="edit_image">Edit selected image</string>
+    <string name="or">or</string>
+    <string name="load_image_error">Error: Can\'t Load Image</string>
+    <string name="source_image">source</string>
+    <string name="color_image">color</string>
+
 </resources>
