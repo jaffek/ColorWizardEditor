@@ -1,4 +1,4 @@
-package com.affek.colorwizardeditor.presentation.components.zoomable
+package com.affek.colorwizardeditor.presentation.util.zoomable
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable
@@ -32,7 +32,7 @@ import kotlin.math.abs
  */
 @Stable
 class ZoomState(
-    @FloatRange(from = 1.0) private val maxScale: Float = 4f,
+    @FloatRange(from = 1.0) private val maxScale: Float = 2.5f,
     private var contentSize: Size = Size.Zero,
     private val velocityDecay: DecayAnimationSpec<Float> = exponentialDecay(),
 ) {
@@ -395,7 +395,7 @@ class ZoomState(
  */
 @Composable
 fun rememberZoomState(
-    @FloatRange(from = 1.0) maxScale: Float = 5f,
+    @FloatRange(from = 1.0) maxScale: Float = 2.5f,
     contentSize: Size = Size.Zero,
     velocityDecay: DecayAnimationSpec<Float> = exponentialDecay(),
 ) = remember {

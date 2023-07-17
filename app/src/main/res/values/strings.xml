@@ -8,5 +8,27 @@
     <string name="load_image_error">Error: Can\'t Load Image</string>
     <string name="source_image">source</string>
     <string name="color_image">color</string>
+    <string name="color_transfer_item_label">Color transfer adjustments</string>
+    <string name="basic_editor_item_label">Basic image adjustments</string>
+    <string name="basic_color_editor_item_label">Basic color adjustments</string>
+    <string name="details_editor_item_label">Details adjustments</string>
+    <string name="export_image_editor_item_label">Export image</string>
+    <string name="color_transfer_item_text">Colorize</string>
+    <string name="basic_editor_item_text">Light</string>
+    <string name="basic_color_editor_item_text">Colors</string>
+    <string name="details_editor_item_text">Details</string>
+    <string name="export_image_editor_item_text">Export</string>
+    <string name="exposure">Exposure</string>
+    <string name="contrast">Contrast</string>
+    <string name="gamma">Gamma</string>
+    <string name="highlights">Highlights</string>
+    <string name="shadows">Shadows</string>
+    <string name="back">Go back</string>
+    <string name="undo">Undo changes</string>
+    <string name="additional_options">Additional options</string>
+
+
+
+
 
 </resources>

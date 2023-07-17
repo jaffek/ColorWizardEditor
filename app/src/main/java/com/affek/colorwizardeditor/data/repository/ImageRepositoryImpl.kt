@@ -7,14 +7,15 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import com.affek.colorwizardeditor.domain.repository.ImageRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class ImageRepository @Inject constructor(@ApplicationContext val context: Context) {
-
+class ImageRepositoryImpl @Inject constructor(
+    @ApplicationContext val context: Context) : ImageRepository {
 //    suspend fun saveImage(uri : Uri?, id : String): Unit {
 //
 //        val image = uriToBitmap(uri)
@@ -53,7 +54,8 @@ class ImageRepository @Inject constructor(@ApplicationContext val context: Conte
 //
 
 
-    suspend fun uriToBitmap(uri : Uri?) : Bitmap = withContext(Dispatchers.IO){
+
+    override suspend fun uriToBitmap(uri : Uri?) : Bitmap = withContext(Dispatchers.IO){
 
         if (Build.VERSION.SDK_INT < 28)
         {

@@ -33,7 +33,6 @@ suspend fun colorTransfer(sourceImage: Bitmap?, colorImage: Bitmap?): Bitmap = w
 
     sourceMat.convertTo(sourceMat, CvType.CV_8UC4)
     Imgproc.cvtColor(sourceMat, sourceMat, Imgproc.COLOR_Lab2RGB)
-
     val finalBitmap = sourceImage!!.copy(sourceImage.config, true)
     Utils.matToBitmap(sourceMat, finalBitmap)
     finalBitmap

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="bottom_bar_tab_min_height">60.dp</dimen>
+    <dimen name="bottom_bar_edge_padding">0.dp</dimen>
+    <dimen name="bottom_bar_active_indicator_height">3.dp</dimen>
+    <dimen name="bottom_bar_indicator_width">40.dp</dimen>
+    <dimen name="bottom_bar_icon_size">20.dp</dimen>
+    <dimen name="bottom_bar_text_base_line_with_icon">7.dp</dimen>
+    <dimen name="bottom_bar_icon_with_text_tab_height">50.dp</dimen>
+    <dimen name="bottom_bar_horizontal_text_padding">10.dp</dimen>
+    <dimen name="dropdown_menu_order_width">1.dp</dimen>
+    <dimen name="dropdown_menu_corner_radius">5.dp</dimen>
+    <dimen name="dropdown_menu_horizontal_offset">10.dp</dimen>
+    <dimen name="dropdown_menu_vertical_offset">0.dp</dimen>
+    <dimen name="bottom_bar_slider_description_left_padding">18.dp</dimen>
+    <dimen name="bottom_bar_slider_description_top_padding">15.dp</dimen>
+    <dimen name="bottom_bar_slider_description_right_padding">18.dp</dimen>
+    <dimen name="bottom_bar_slider_description_bottom_padding">0.dp</dimen>
+    <dimen name="menu_buttons_border">2.dp</dimen>
+    <dimen name="bottom_bar_slider_horizontal_padding">10.dp</dimen>
+
+
+
+
+
+
+
+
+
+</resources>

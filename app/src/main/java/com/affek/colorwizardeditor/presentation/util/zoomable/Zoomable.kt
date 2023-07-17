@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEach
-import com.affek.colorwizardeditor.presentation.components.zoomable.ZoomState
+import com.affek.colorwizardeditor.presentation.util.zoomable.ZoomState
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
