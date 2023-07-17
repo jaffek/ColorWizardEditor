@@ -1,3 +1,5 @@
+package com.affek.colorwizardeditor.presentation.util.modifiers.zoomable_modifier
+
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.*
@@ -12,7 +14,6 @@ import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEach
-import com.affek.colorwizardeditor.presentation.util.zoomable.ZoomState
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -193,7 +194,7 @@ private class TouchSlop(private val threshold: Float) {
 }
 
 /**
- * Modifier function that make the content zoomable.
+ * Modifier function that make the content com.affek.colorwizardeditor.presentation.util.modifiers.zoomable_modifier.zoomable.
  *
  * @param zoomState A [ZoomState] object.
  * @param enableOneFingerZoom If true, enable one finger zoom gesture, double tap followed by
@@ -210,7 +211,7 @@ fun Modifier.zoomable(
     onDoubleTap: suspend (position: Offset) -> Unit = { position -> zoomState.toggleScale(2.5f, position) },
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
-        name = "zoomable"
+        name = "com.affek.colorwizardeditor.presentation.util.modifiers.zoomable_modifier.zoomable"
         properties["zoomState"] = zoomState
     }
 ) {

@@ -1,4 +1,4 @@
-package com.affek.colorwizardeditor.presentation.util.zoomable
+package com.affek.colorwizardeditor.presentation.util.modifiers.zoomable_modifier
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable

@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,16 +24,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.affek.colorwizardeditor.navigation.ColorTransferScreenNavArgs
 import com.affek.colorwizardeditor.presentation.image_editor.components.ImageEditBottomBar
 import com.affek.colorwizardeditor.presentation.image_editor.components.ImageEditTopBar
 import com.affek.colorwizardeditor.presentation.image_editor.components.LightEditPanel
-import com.affek.colorwizardeditor.presentation.util.modifiers.conditional
-import com.affek.colorwizardeditor.presentation.util.zoomable.rememberZoomState
+import com.affek.colorwizardeditor.presentation.util.modifiers.conditional_modifier.conditional
+import com.affek.colorwizardeditor.presentation.util.modifiers.conditional_modifier.longPressAction
+import com.affek.colorwizardeditor.presentation.util.modifiers.zoomable_modifier.rememberZoomState
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import zoomable
+import com.affek.colorwizardeditor.presentation.util.modifiers.zoomable_modifier.zoomable
 
 
 @Destination(
@@ -113,6 +116,9 @@ fun ImageEditorScreen(
                                 viewModel.onEvent(ImageEditorEvent.FullScreen(view))
                             }
                         )
+                        .longPressAction(onPressAction = {
+                            viewModel.onEvent(ImageEditorEvent.ImagePress(it))
+                        })
                 )
             }
             if(!state.isFullScreen) {

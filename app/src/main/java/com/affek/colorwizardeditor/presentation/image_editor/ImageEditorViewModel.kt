@@ -76,7 +76,8 @@ class ImageEditorViewModel @Inject constructor(
             is ImageEditorEvent.SelectTab -> {
                 _state.value = _state.value.copy(
                     bottomBarSelectedItem = event.index,
-                    isBottomBarItemSelected = event.isSelected
+                    isBottomBarItemSelected = event.isSelected,
+                    isBottomBarItemSelectedPreviousState = event.isSelected
                 )
             }
             is ImageEditorEvent.ExpandDropDownMenu -> {
@@ -85,8 +86,10 @@ class ImageEditorViewModel @Inject constructor(
                 )
             }
             is ImageEditorEvent.FullScreen -> {
+                val isFullScreenTemp = !_state.value.isFullScreen
                 _state.value = _state.value.copy(
-                    isFullScreen = !_state.value.isFullScreen
+                    isFullScreen = isFullScreenTemp,
+                    isFullScreenPreviousState = isFullScreenTemp
                 )
                 if(_state.value.isFullScreen)
                     requestFullScreen(event.view)
@@ -141,17 +144,33 @@ class ImageEditorViewModel @Inject constructor(
                         isUndoButtonEnabled = false
                     )
                 }
-//                else {
-//                    _state.value = _state.value.copy(
-//                        imageParams = listOf(ImageParams(
-//                            LightEditPanelSliders.ExposureSlider.basePoint,
-//                            LightEditPanelSliders.ContrastSlider.basePoint,
-//                            LightEditPanelSliders.GammaSlider.basePoint,
-//                            -1
-//                        )
-//                        )
-//                    )
-//                }
+            }
+            is ImageEditorEvent.ImagePress -> {
+                if(event.isImagePressed) {
+                    _state.value = _state.value.copy(
+                        isFullScreen = true,
+                        calculatedImage = lightEditing(
+                            sourceImage,
+                            _state.value.imageParams.first().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
+                            _state.value.imageParams.first().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
+                            _state.value.imageParams.first().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                        ),
+                        isBottomBarItemSelected = false,
+                        isShowingBeforeEdit = true
+                    )
+                } else {
+                    _state.value = _state.value.copy(
+                        isFullScreen = _state.value.isFullScreenPreviousState,
+                        calculatedImage = lightEditing(
+                            sourceImage,
+                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
+                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
+                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                        ),
+                        isBottomBarItemSelected = _state.value.isBottomBarItemSelectedPreviousState,
+                        isShowingBeforeEdit = false
+                    )
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.affek.colorwizardeditor.presentation.util.modifiers
+package com.affek.colorwizardeditor.presentation.util.modifiers.conditional_modifier
 
 import androidx.compose.ui.Modifier
 

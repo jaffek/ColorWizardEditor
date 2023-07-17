@@ -9,6 +9,7 @@ sealed class ImageEditorEvent {
     data class FullScreen(val view: View) : ImageEditorEvent()
     data class BasicPanelSliders(val value: Float, val sliderIndex: Int) : ImageEditorEvent()
     object UndoEdit : ImageEditorEvent()
+    data class ImagePress(val isImagePressed : Boolean) : ImageEditorEvent()
 
 
 }
