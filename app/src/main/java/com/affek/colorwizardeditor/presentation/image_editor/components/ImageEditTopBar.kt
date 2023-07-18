@@ -3,6 +3,7 @@ package com.affek.colorwizardeditor.presentation.image_editor.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
@@ -26,17 +27,20 @@ import com.affek.colorwizardeditor.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageEditTopBar(
+    modifier : Modifier = Modifier,
     backClick : () -> Unit,
-    undoClick : () ->Unit,
+    undoClick : () -> Unit,
+    resetClick: () -> Unit,
     clickTopMenu : () -> Unit,
     isDropDownMenuExpanded : Boolean,
     visible : Boolean = true,
     isUndoButtonEnabled: Boolean = false,
+    isResetButtonEnable: Boolean = false,
     title : @Composable () -> Unit = {}
 ) {
     if(visible) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             TopAppBar(
@@ -56,9 +60,20 @@ fun ImageEditTopBar(
                         onClick = { undoClick() },
                         enabled = isUndoButtonEnabled
                     ) {
+
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_undo_24),
                             contentDescription = stringResource(id = R.string.undo),
+                        )
+
+                    }
+                    IconButton(
+                        onClick = { resetClick() },
+                        enabled = isResetButtonEnable
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_restart_alt_24),
+                            contentDescription = stringResource(id = R.string.reset_changes),
                         )
                     }
                     IconButton(

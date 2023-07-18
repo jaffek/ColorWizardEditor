@@ -21,7 +21,7 @@ data class ImageEditorState(
         )
     ),
     val isUndoButtonEnabled: Boolean = false,
-    val isImagePressed : Boolean = false,
+    val isResetButtonEnabled: Boolean = false,
     val isBottomBarItemSelectedPreviousState: Boolean = false,
     val isFullScreenPreviousState: Boolean = false,
     val isShowingBeforeEdit: Boolean = false

@@ -37,19 +37,12 @@ fun LightEditPanel(
     onChange : (value: Float, index: Int) -> Unit
 ) {
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.3f),
-        contentAlignment = Alignment.BottomStart
-    )
-    {
+
         Column(
             modifier = Modifier
                 .alpha(0.9f)
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .clickable(enabled = false, onClick = {})
-                .wrapContentSize(Alignment.BottomStart)
                 .verticalScroll(state = rememberScrollState())
         ) {
 
@@ -73,7 +66,7 @@ fun LightEditPanel(
                     Spacer(Modifier.weight(1f))
                     Text(
                         text = if(item.index == LightEditPanelSliders.GammaSlider.index) {
-                            val df = DecimalFormat("#.00")
+                            val df = DecimalFormat("0.00")
                             df.roundingMode = RoundingMode.HALF_UP
                             val roundoff = df.format(params.indexedParams[item.index])
                             roundoff
@@ -103,7 +96,7 @@ fun LightEditPanel(
             }
             
         }
-    }
+
 }
 
 

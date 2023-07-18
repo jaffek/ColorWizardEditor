@@ -23,6 +23,7 @@ import com.affek.colorwizardeditor.R
 
 @Composable
 fun ImageEditBottomBar(
+    modifier : Modifier = Modifier,
     items: List<ImageEditBottomBarItems>,
     selectedIndex: Int,
     isSelected: Boolean,
@@ -32,8 +33,8 @@ fun ImageEditBottomBar(
 ) {
     if (visible) {
         Box(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
+            modifier = modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             CustomScrollableTabRow(
                 selectedTabIndex = if (isSelected) selectedIndex else -1,
@@ -42,7 +43,7 @@ fun ImageEditBottomBar(
                 divider = divider,
                 activeIndicatorHeight = dimensionResource(id = R.dimen.bottom_bar_active_indicator_height),
                 indicatorWidth = dimensionResource(id = R.dimen.bottom_bar_indicator_width),
-                containerColor = MaterialTheme.colorScheme.background,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier
                     .navigationBarsPadding()
             ) {

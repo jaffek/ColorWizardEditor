@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.annotation.Destination
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
@@ -59,18 +61,24 @@ fun ImageEditorScreen(
     Scaffold(
         topBar = {
             ImageEditTopBar(
+                modifier = Modifier
+                    .conditional(state.isShowingBeforeEdit){ alpha(0f) },
                 backClick = {
                     navigator.navigateUp()
                 },
                 undoClick = { viewModel.onEvent(ImageEditorEvent.UndoEdit) },
+                resetClick = { viewModel.onEvent(ImageEditorEvent.ResetEdit) },
                 clickTopMenu = { viewModel.onEvent(ImageEditorEvent.ExpandDropDownMenu) },
                 isDropDownMenuExpanded = state.isDropDownMenuExpanded,
                 visible = !state.isFullScreen,
-                isUndoButtonEnabled = state.isUndoButtonEnabled
+                isUndoButtonEnabled = state.isUndoButtonEnabled,
+                isResetButtonEnable = state.isResetButtonEnabled
             )
         },
         bottomBar = {
             ImageEditBottomBar(
+                modifier = Modifier
+                    .conditional(state.isShowingBeforeEdit){ alpha(0f) },
                 items = bottomAppBarItems,
                 selectedIndex = state.bottomBarSelectedItem,
                 isSelected = state.isBottomBarItemSelected,
@@ -83,49 +91,59 @@ fun ImageEditorScreen(
         modifier = Modifier
             .fillMaxSize()
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .conditional(!state.isFullScreen) {padding(paddingValues)}
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            AnimatedVisibility(
-                visible = state.isLoading,
+            Box(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .conditional(!state.isBottomBarItemSelected) { fillMaxSize() }
+                    .fillMaxWidth()
+                    .conditional(state.isBottomBarItemSelected) { weight(1f) }
             ) {
-                CircularProgressIndicator()
-            }
-            AnimatedVisibility(
-                visible = !state.isLoading,
-            ) {
-                zoomState.setContentSize(
-                    Size(
-                        state.calculatedImage!!.width.toFloat(),
-                        state.calculatedImage!!.height.toFloat()
-                    )
-                )
-                Image(
-                    bitmap = state.calculatedImage!!.asImageBitmap(),
-                    contentDescription = "Edited image",
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = state.isLoading,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .zoomable(
-                            zoomState,
-                            onTap = {
-                                viewModel.onEvent(ImageEditorEvent.FullScreen(view))
-                            }
+                        .align(Alignment.Center)
+                ) {
+                    CircularProgressIndicator()
+                }
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = !state.isLoading,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                ) {
+                    zoomState.setContentSize(
+                        Size(
+                            state.calculatedImage!!.width.toFloat(),
+                            state.calculatedImage!!.height.toFloat()
                         )
-                        .longPressAction(onPressAction = {
-                            viewModel.onEvent(ImageEditorEvent.ImagePress(it))
-                        })
-                )
+                    )
+                    Image(
+                        bitmap = state.calculatedImage!!.asImageBitmap(),
+                        contentDescription = "Edited image",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .zoomable(
+                                zoomState,
+                                onTap = {
+                                    viewModel.onEvent(ImageEditorEvent.FullScreen(view))
+                                }
+                            )
+                            .longPressAction(onPressAction = {
+                                viewModel.onEvent(ImageEditorEvent.ImagePress(it))
+                            })
+                    )
+                }
             }
             if(!state.isFullScreen) {
                 AnimatedVisibility(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.BottomCenter),
+                        .align(Alignment.CenterHorizontally)
+                        .conditional(state.isShowingBeforeEdit){ alpha(0f) },
                     visible = state.isBottomBarItemSelected,
                     enter = slideInVertically(initialOffsetY = { height -> height / 2 }) + fadeIn(),
                     exit = slideOutVertically(targetOffsetY = { height -> height / 2 }) + fadeOut()
