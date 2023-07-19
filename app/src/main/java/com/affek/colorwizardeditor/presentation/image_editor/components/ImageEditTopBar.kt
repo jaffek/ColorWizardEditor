@@ -30,12 +30,14 @@ fun ImageEditTopBar(
     modifier : Modifier = Modifier,
     backClick : () -> Unit,
     undoClick : () -> Unit,
+    redoClick : () -> Unit,
     resetClick: () -> Unit,
     clickTopMenu : () -> Unit,
     isDropDownMenuExpanded : Boolean,
     visible : Boolean = true,
     isUndoButtonEnabled: Boolean = false,
-    isResetButtonEnable: Boolean = false,
+    isResetButtonEnabled: Boolean = false,
+    isRedoButtonEnabled: Boolean = false,
     title : @Composable () -> Unit = {}
 ) {
     if(visible) {
@@ -68,8 +70,19 @@ fun ImageEditTopBar(
 
                     }
                     IconButton(
+                        onClick = { redoClick() },
+                        enabled = isRedoButtonEnabled
+                    ) {
+
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_redo_24),
+                            contentDescription = stringResource(id = R.string.redo),
+                        )
+
+                    }
+                    IconButton(
                         onClick = { resetClick() },
-                        enabled = isResetButtonEnable
+                        enabled = isResetButtonEnabled
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_restart_alt_24),

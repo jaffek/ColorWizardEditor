@@ -76,8 +76,7 @@ class ImageEditorViewModel @Inject constructor(
             is ImageEditorEvent.SelectTab -> {
                 _state.value = _state.value.copy(
                     bottomBarSelectedItem = event.index,
-                    isBottomBarItemSelected = event.isSelected,
-                    isBottomBarItemSelectedPreviousState = event.isSelected
+                    isBottomBarItemSelected = event.isSelected
                 )
             }
             is ImageEditorEvent.ExpandDropDownMenu -> {
@@ -86,10 +85,8 @@ class ImageEditorViewModel @Inject constructor(
                 )
             }
             is ImageEditorEvent.FullScreen -> {
-                val isFullScreenTemp = !_state.value.isFullScreen
                 _state.value = _state.value.copy(
-                    isFullScreen = isFullScreenTemp,
-                    isFullScreenPreviousState = isFullScreenTemp
+                    isFullScreen = !_state.value.isFullScreen
                 )
                 if(_state.value.isFullScreen)
                     requestFullScreen(event.view)
@@ -97,15 +94,21 @@ class ImageEditorViewModel @Inject constructor(
                     exitFullScreen(event.view)
             }
             is ImageEditorEvent.BasicPanelSliders -> {
-                val tempValues = _state.value.imageParams.last().clone()
+                var currentChangesIndex = _state.value.currentIndexOfEditChanges
+                val tempValues = _state.value.imageParams[currentChangesIndex].clone()
                 tempValues.indexedParams[event.sliderIndex] = event.value
-                val tempEditHistory = _state.value.imageParams.map { it.clone() }.toMutableList()
+                val tempEditHistory : List<ImageParams>
+                if(currentChangesIndex < _state.value.imageParams.size - 1)
+                    tempEditHistory = _state.value.imageParams.slice(0..currentChangesIndex).toMutableList()
+               else
+                    tempEditHistory = _state.value.imageParams.toMutableList()
                 if(event.sliderIndex == tempValues.indexOfLastEdited) {
                     tempEditHistory[tempEditHistory.lastIndex] = tempValues
                 }
                 else {
                     tempValues.indexOfLastEdited = event.sliderIndex
                     tempEditHistory.add(tempValues)
+                    currentChangesIndex++
                 }
                 _state.value = _state.value.copy(
                     imageParams = tempEditHistory,
@@ -116,53 +119,62 @@ class ImageEditorViewModel @Inject constructor(
                         tempEditHistory.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
                     ),
                     isUndoButtonEnabled = true,
-                    isResetButtonEnabled = true
+                    isResetButtonEnabled = true,
+                    currentIndexOfEditChanges = currentChangesIndex,
+                    isRedoButtonEnabled = false
                 )
             }
             is ImageEditorEvent.UndoEdit -> {
-                if(_state.value.imageParams.size > 1){
-                    val tempEditHistory = _state.value.imageParams.map { it.clone() }.toMutableList()
-                    tempEditHistory.removeLast()
-                    _state.value = _state.value.copy(
-                        imageParams = tempEditHistory,
-                        calculatedImage = lightEditing(
-                            sourceImage,
-                            tempEditHistory.last().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
-                            tempEditHistory.last().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                            tempEditHistory.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
-                        ),
-                        isUndoButtonEnabled = tempEditHistory.size > 1,
-                        isResetButtonEnabled = tempEditHistory.size > 1
-                    )
-                } else {
-                    _state.value = _state.value.copy(
-                        calculatedImage = lightEditing(
-                            sourceImage,
-                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
-                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
-                        ),
-                        isUndoButtonEnabled = false,
-                        isResetButtonEnabled = false
-                    )
-                }
-            }
-            is ImageEditorEvent.ResetEdit -> {
-                val tempValues = _state.value.imageParams.first().clone()
-                val tempEditHistory = listOf(tempValues)
+
+                val currentIndex = _state.value.currentIndexOfEditChanges - 1
                 _state.value = _state.value.copy(
-                    imageParams = tempEditHistory,
                     calculatedImage = lightEditing(
                         sourceImage,
-                        tempEditHistory.last().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
-                        tempEditHistory.last().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                        tempEditHistory.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                    ),
+                    isUndoButtonEnabled = currentIndex > 0,
+                    isResetButtonEnabled = currentIndex > 0,
+                    currentIndexOfEditChanges = currentIndex,
+                    isRedoButtonEnabled = true
+                )
+
+            }
+            is ImageEditorEvent.RedoEdit -> {
+                val currentIndex = _state.value.currentIndexOfEditChanges + 1
+
+                _state.value = _state.value.copy(
+                    calculatedImage = lightEditing(
+                        sourceImage,
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                    ),
+                    isUndoButtonEnabled = true,
+                    isResetButtonEnabled = true,
+                    currentIndexOfEditChanges = currentIndex,
+                    isRedoButtonEnabled = currentIndex < _state.value.imageParams.size - 1
+                )
+
+            }
+            is ImageEditorEvent.ResetEdit -> {
+
+                _state.value = _state.value.copy(
+                    calculatedImage = lightEditing(
+                        sourceImage,
+                        _state.value.imageParams[0].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
+                        _state.value.imageParams[0].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
+                        _state.value.imageParams[0].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
                     ),
                     isUndoButtonEnabled = false,
-                    isResetButtonEnabled = false
+                    isResetButtonEnabled = false,
+                    isRedoButtonEnabled = true,
+                    currentIndexOfEditChanges = 0
                 )
             }
             is ImageEditorEvent.ImagePress -> {
+                val currentIndex = _state.value.currentIndexOfEditChanges
                 if(event.isImagePressed) {
                     _state.value = _state.value.copy(
                         calculatedImage = lightEditing(
@@ -177,9 +189,9 @@ class ImageEditorViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         calculatedImage = lightEditing(
                             sourceImage,
-                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
-                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                            _state.value.imageParams.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                            _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
+                            _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
+                            _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
                         ),
                         isShowingBeforeEdit = false
                     )

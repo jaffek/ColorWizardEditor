@@ -67,12 +67,14 @@ fun ImageEditorScreen(
                     navigator.navigateUp()
                 },
                 undoClick = { viewModel.onEvent(ImageEditorEvent.UndoEdit) },
+                redoClick = { viewModel.onEvent(ImageEditorEvent.RedoEdit) },
                 resetClick = { viewModel.onEvent(ImageEditorEvent.ResetEdit) },
                 clickTopMenu = { viewModel.onEvent(ImageEditorEvent.ExpandDropDownMenu) },
                 isDropDownMenuExpanded = state.isDropDownMenuExpanded,
                 visible = !state.isFullScreen,
                 isUndoButtonEnabled = state.isUndoButtonEnabled,
-                isResetButtonEnable = state.isResetButtonEnabled
+                isResetButtonEnabled = state.isResetButtonEnabled,
+                isRedoButtonEnabled = state.isRedoButtonEnabled
             )
         },
         bottomBar = {
@@ -155,7 +157,7 @@ fun ImageEditorScreen(
                                 onChange = { value, index ->
                                     viewModel.onEvent(ImageEditorEvent.BasicPanelSliders(value, index))
                                 },
-                                params = state.imageParams.last()
+                                params = state.imageParams[state.currentIndexOfEditChanges]
                             )
                     }
                 }
