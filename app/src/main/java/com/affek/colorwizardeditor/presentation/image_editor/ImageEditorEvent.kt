@@ -8,6 +8,7 @@ sealed class ImageEditorEvent {
     object ExpandDropDownMenu : ImageEditorEvent()
     data class FullScreen(val view: View) : ImageEditorEvent()
     data class BasicPanelSliders(val value: Float, val sliderIndex: Int) : ImageEditorEvent()
+    data class ColorTransferPanelSliders(val value: Float, val sliderIndex: Int) : ImageEditorEvent()
     object UndoEdit : ImageEditorEvent()
     object RedoEdit : ImageEditorEvent()
     object ResetEdit : ImageEditorEvent()

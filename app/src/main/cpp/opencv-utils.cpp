@@ -21,6 +21,16 @@ void lightChange(Mat& src, float exposureVal, float contrastVal, float gamma) {
     }
 }
 
+void colorTransferIntensity(Mat& source, Mat& color, float intensity) {
+    source.convertTo(source, CV_16S);
+    color.convertTo(color, CV_16S);
+    Mat diff;
+    subtract(color, source, diff);
+    addWeighted(source, 1, diff, intensity, 0, source);
+    source.convertTo(source, CV_8UC4);
+
+}
+
 
 void colorTransfer(Mat& source, Mat color_image) {
         cvtColor(source, source, COLOR_RGB2Lab);
@@ -55,9 +65,6 @@ void colorTransfer(Mat& source, Mat color_image) {
 }
 
 std::tuple<double, double, double, double, double, double> image_stats(Mat image) {
-
-
-
     Mat channels[3];
     split(image, channels);
 

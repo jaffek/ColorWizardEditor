@@ -41,3 +41,20 @@ Java_com_affek_colorwizardeditor_data_image_1processing_ColorTransferKt_colorTra
     colorTransfer(src, color);
     matToBitmap(env, src, final_bitmap, false);
 }
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_affek_colorwizardeditor_data_image_1processing_LightEditingKt_colorTransferIntenisty(
+        JNIEnv *env,
+        jclass clazz,
+        jobject source_bitmap,
+        jobject color_bitmap,
+        jobject final_bitmap,
+        jfloat color_intensity) {
+
+    Mat src, color;
+    bitmapToMat(env, source_bitmap, src, false);
+    bitmapToMat(env, color_bitmap, color, false);
+    colorTransferIntensity(src, color, color_intensity);
+    matToBitmap(env, src, final_bitmap, false);
+}

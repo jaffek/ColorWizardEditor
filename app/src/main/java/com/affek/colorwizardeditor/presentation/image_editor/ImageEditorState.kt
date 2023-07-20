@@ -2,6 +2,7 @@ package com.affek.colorwizardeditor.presentation.image_editor
 
 import android.graphics.Bitmap
 import com.affek.colorwizardeditor.domain.model.ImageParams
+import com.affek.colorwizardeditor.presentation.image_editor.components.ColorTransferPanelSliders
 import com.affek.colorwizardeditor.presentation.image_editor.components.LightEditPanelSliders
 
 data class ImageEditorState(
@@ -17,6 +18,8 @@ data class ImageEditorState(
             LightEditPanelSliders.ExposureSlider.basePoint,
             LightEditPanelSliders.ContrastSlider.basePoint,
             LightEditPanelSliders.GammaSlider.basePoint,
+            ColorTransferPanelSliders.ColorTransferIntensity.basePoint,
+            -1,
             -1
         )
     ),

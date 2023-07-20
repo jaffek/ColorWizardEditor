@@ -3,7 +3,6 @@ package com.affek.colorwizardeditor.presentation.image_editor
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +12,7 @@ import com.affek.colorwizardeditor.data.image_processing.lightEditing
 import com.affek.colorwizardeditor.data.repository.ImageRepositoryImpl
 import com.affek.colorwizardeditor.domain.model.ImageParams
 import com.affek.colorwizardeditor.navigation.ColorTransferScreenNavArgs
+import com.affek.colorwizardeditor.presentation.image_editor.components.ColorTransferPanelSliders
 import com.affek.colorwizardeditor.presentation.image_editor.components.ImageEditBottomBarItems
 import com.affek.colorwizardeditor.presentation.image_editor.components.LightEditPanelSliders
 import com.affek.colorwizardeditor.presentation.navArgs
@@ -60,6 +60,7 @@ class ImageEditorViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
+                colorImage = _state.value.calculatedImage
             } else {
                 _state.update { currentState ->
                     currentState.copy(
@@ -97,16 +98,17 @@ class ImageEditorViewModel @Inject constructor(
                 var currentChangesIndex = _state.value.currentIndexOfEditChanges
                 val tempValues = _state.value.imageParams[currentChangesIndex].clone()
                 tempValues.indexedParams[event.sliderIndex] = event.value
+                tempValues.indexOfLastEditedPanel = ImageEditBottomBarItems.BasicEditor.index
                 val tempEditHistory : List<ImageParams>
                 if(currentChangesIndex < _state.value.imageParams.size - 1)
                     tempEditHistory = _state.value.imageParams.slice(0..currentChangesIndex).toMutableList()
                else
                     tempEditHistory = _state.value.imageParams.toMutableList()
-                if(event.sliderIndex == tempValues.indexOfLastEdited) {
+                if(event.sliderIndex == tempValues.indexOfLastEditedSlider) {
                     tempEditHistory[tempEditHistory.lastIndex] = tempValues
                 }
                 else {
-                    tempValues.indexOfLastEdited = event.sliderIndex
+                    tempValues.indexOfLastEditedSlider = event.sliderIndex
                     tempEditHistory.add(tempValues)
                     currentChangesIndex++
                 }
@@ -114,9 +116,11 @@ class ImageEditorViewModel @Inject constructor(
                     imageParams = tempEditHistory,
                     calculatedImage = lightEditing(
                         sourceImage,
+                        colorImage,
                         tempEditHistory.last().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
                         tempEditHistory.last().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                        tempEditHistory.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                        tempEditHistory.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!,
+                        tempEditHistory.last().indexedParams[ColorTransferPanelSliders.ColorTransferIntensity.index]!!
                     ),
                     isUndoButtonEnabled = true,
                     isResetButtonEnabled = true,
@@ -130,9 +134,11 @@ class ImageEditorViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     calculatedImage = lightEditing(
                         sourceImage,
+                        colorImage,
                         _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
                         _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!,
+                        _state.value.imageParams[currentIndex].indexedParams[ColorTransferPanelSliders.ColorTransferIntensity.index]!!
                     ),
                     isUndoButtonEnabled = currentIndex > 0,
                     isResetButtonEnabled = currentIndex > 0,
@@ -147,9 +153,11 @@ class ImageEditorViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     calculatedImage = lightEditing(
                         sourceImage,
+                        colorImage,
                         _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
                         _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                        _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!,
+                        _state.value.imageParams[currentIndex].indexedParams[ColorTransferPanelSliders.ColorTransferIntensity.index]!!
                     ),
                     isUndoButtonEnabled = true,
                     isResetButtonEnabled = true,
@@ -163,9 +171,11 @@ class ImageEditorViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     calculatedImage = lightEditing(
                         sourceImage,
+                        colorImage,
                         _state.value.imageParams[0].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
                         _state.value.imageParams[0].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                        _state.value.imageParams[0].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                        _state.value.imageParams[0].indexedParams[LightEditPanelSliders.GammaSlider.index]!!,
+                        _state.value.imageParams[0].indexedParams[ColorTransferPanelSliders.ColorTransferIntensity.index]!!
                     ),
                     isUndoButtonEnabled = false,
                     isResetButtonEnabled = false,
@@ -179,9 +189,12 @@ class ImageEditorViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         calculatedImage = lightEditing(
                             sourceImage,
+                            colorImage,
                             _state.value.imageParams.first().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
                             _state.value.imageParams.first().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                            _state.value.imageParams.first().indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                            _state.value.imageParams.first().indexedParams[LightEditPanelSliders.GammaSlider.index]!!,
+                            _state.value.imageParams.first().indexedParams[ColorTransferPanelSliders.ColorTransferIntensity.index]!!
+
                         ),
                         isShowingBeforeEdit = true
                     )
@@ -189,13 +202,49 @@ class ImageEditorViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         calculatedImage = lightEditing(
                             sourceImage,
+                            colorImage,
                             _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
                             _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
-                            _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!
+                            _state.value.imageParams[currentIndex].indexedParams[LightEditPanelSliders.GammaSlider.index]!!,
+                            _state.value.imageParams[currentIndex].indexedParams[ColorTransferPanelSliders.ColorTransferIntensity.index]!!
                         ),
                         isShowingBeforeEdit = false
                     )
                 }
+            }
+            is ImageEditorEvent.ColorTransferPanelSliders -> {
+                var currentChangesIndex = _state.value.currentIndexOfEditChanges
+                val tempValues = _state.value.imageParams[currentChangesIndex].clone()
+                tempValues.indexedParams[event.sliderIndex] = event.value
+                tempValues.indexOfLastEditedPanel = ImageEditBottomBarItems.ColorTransferEditor.index
+                val tempEditHistory : List<ImageParams>
+                if(currentChangesIndex < _state.value.imageParams.size - 1)
+                    tempEditHistory = _state.value.imageParams.slice(0..currentChangesIndex).toMutableList()
+                else
+                    tempEditHistory = _state.value.imageParams.toMutableList()
+                if(event.sliderIndex == tempValues.indexOfLastEditedSlider) {
+                    tempEditHistory[tempEditHistory.lastIndex] = tempValues
+                }
+                else {
+                    tempValues.indexOfLastEditedSlider = event.sliderIndex
+                    tempEditHistory.add(tempValues)
+                    currentChangesIndex++
+                }
+                _state.value = _state.value.copy(
+                    imageParams = tempEditHistory,
+                    calculatedImage = lightEditing(
+                        sourceImage,
+                        colorImage,
+                        tempEditHistory.last().indexedParams[LightEditPanelSliders.ExposureSlider.index]!!,
+                        tempEditHistory.last().indexedParams[LightEditPanelSliders.ContrastSlider.index]!!,
+                        tempEditHistory.last().indexedParams[LightEditPanelSliders.GammaSlider.index]!!,
+                        tempEditHistory.last().indexedParams[ColorTransferPanelSliders.ColorTransferIntensity.index]!!
+                    ),
+                    isUndoButtonEnabled = true,
+                    isResetButtonEnabled = true,
+                    currentIndexOfEditChanges = currentChangesIndex,
+                    isRedoButtonEnabled = false
+                )
             }
         }
     }

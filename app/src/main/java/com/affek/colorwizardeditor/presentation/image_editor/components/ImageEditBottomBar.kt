@@ -87,13 +87,13 @@ fun ImageEditBottomBar(
     }
 }
 
-enum class ImageEditBottomBarItems(@StringRes val labelResourceId: Int, @DrawableRes val iconResourceId: Int, @StringRes val textResourceId: Int) {
+enum class ImageEditBottomBarItems(@StringRes val labelResourceId: Int, @DrawableRes val iconResourceId: Int, @StringRes val textResourceId: Int, val index : Int) {
 
-    ColorTransferEditor(R.string.color_transfer_item_label, R.drawable.baseline_format_color_fill_24, R.string.color_transfer_item_text),
-    BasicEditor(R.string.basic_editor_item_label, R.drawable.baseline_brightness_6_24, R.string.basic_editor_item_text),
-    ColorEditor(R.string.basic_color_editor_item_label, R.drawable.baseline_color_lens_24, R.string.basic_color_editor_item_text),
-    SharpeningEditor(R.string.details_editor_item_label, R.drawable.baseline_details_24, R.string.details_editor_item_text),
-    ExportEditor(R.string.export_image_editor_item_label, R.drawable.baseline_save_alt_24, R.string.export_image_editor_item_text)
+    ColorTransferEditor(R.string.color_transfer_item_label, R.drawable.baseline_format_color_fill_24, R.string.color_transfer_item_text, 0),
+    BasicEditor(R.string.basic_editor_item_label, R.drawable.baseline_brightness_6_24, R.string.basic_editor_item_text,1),
+    ColorEditor(R.string.basic_color_editor_item_label, R.drawable.baseline_color_lens_24, R.string.basic_color_editor_item_text,2),
+    SharpeningEditor(R.string.details_editor_item_label, R.drawable.baseline_details_24, R.string.details_editor_item_text,3),
+    ExportEditor(R.string.export_image_editor_item_label, R.drawable.baseline_save_alt_24, R.string.export_image_editor_item_text,4)
 }
 
 

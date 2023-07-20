@@ -6,5 +6,6 @@
 using namespace cv;
 
 void lightChange(Mat& src, float exposureVal, float contrastVal, float gamma);
+void colorTransferIntensity(Mat& source, Mat& color, float intensity);
 void colorTransfer(Mat& source, Mat color_image);
 std::tuple<double, double, double, double, double, double> image_stats(Mat image);

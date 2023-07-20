@@ -30,6 +30,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.affek.colorwizardeditor.navigation.ColorTransferScreenNavArgs
+import com.affek.colorwizardeditor.presentation.image_editor.components.ColorTransferPanel
 import com.affek.colorwizardeditor.presentation.image_editor.components.ImageEditBottomBar
 import com.affek.colorwizardeditor.presentation.image_editor.components.ImageEditTopBar
 import com.affek.colorwizardeditor.presentation.image_editor.components.LightEditPanel
@@ -152,6 +153,13 @@ fun ImageEditorScreen(
 
                 ) {
                     when {
+                        (state.isColorTransfer && state.bottomBarSelectedItem == 0) ->
+                            ColorTransferPanel(
+                                onChange = { value, index ->
+                                    viewModel.onEvent(ImageEditorEvent.ColorTransferPanelSliders(value, index))
+                                },
+                                params = state.imageParams[state.currentIndexOfEditChanges]
+                            )
                         (state.isColorTransfer && state.bottomBarSelectedItem == 1) || (!state.isColorTransfer && state.bottomBarSelectedItem == 0) ->
                             LightEditPanel(
                                 onChange = { value, index ->
