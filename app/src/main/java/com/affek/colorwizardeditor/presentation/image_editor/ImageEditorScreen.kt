@@ -30,6 +30,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.affek.colorwizardeditor.navigation.ColorTransferScreenNavArgs
+import com.affek.colorwizardeditor.presentation.image_editor.components.ColorEditPanel
 import com.affek.colorwizardeditor.presentation.image_editor.components.ColorTransferPanel
 import com.affek.colorwizardeditor.presentation.image_editor.components.ImageEditBottomBar
 import com.affek.colorwizardeditor.presentation.image_editor.components.ImageEditTopBar
@@ -75,7 +76,11 @@ fun ImageEditorScreen(
                 visible = !state.isFullScreen,
                 isUndoButtonEnabled = state.isUndoButtonEnabled,
                 isResetButtonEnabled = state.isResetButtonEnabled,
-                isRedoButtonEnabled = state.isRedoButtonEnabled
+                isRedoButtonEnabled = state.isRedoButtonEnabled,
+                clickAcceptChanges = { viewModel.onEvent(ImageEditorEvent.AcceptEdit) },
+                clickDismissChanges = { viewModel.onEvent(ImageEditorEvent.DismissEdit) },
+                isAcceptButtonEnabled = state.isAcceptChangesButtonEnabled,
+                isDismissButtonEnabled = state.isDismissChangesButtonEnabled
             )
         },
         bottomBar = {
@@ -85,6 +90,7 @@ fun ImageEditorScreen(
                 items = bottomAppBarItems,
                 selectedIndex = state.bottomBarSelectedItem,
                 isSelected = state.isBottomBarItemSelected,
+                isColorTransfer = state.isColorTransfer,
                 visible = !state.isFullScreen,
                 onClick = { index, isSelected ->
                     viewModel.onEvent(ImageEditorEvent.SelectTab(index, isSelected))
@@ -125,7 +131,7 @@ fun ImageEditorScreen(
                         )
                     )
                     Image(
-                        bitmap = state.calculatedImage!!.asImageBitmap(),
+                        bitmap = if(state.isShowingBeforeEdit) viewModel.sourceImage!!.asImageBitmap() else  state.calculatedImage!!.asImageBitmap(),
                         contentDescription = "Edited image",
                         modifier = Modifier
                             .fillMaxSize()
@@ -158,14 +164,21 @@ fun ImageEditorScreen(
                                 onChange = { value, index ->
                                     viewModel.onEvent(ImageEditorEvent.ColorTransferPanelSliders(value, index))
                                 },
-                                params = state.imageParams[state.currentIndexOfEditChanges]
+                                params = state.currentImageParams
                             )
-                        (state.isColorTransfer && state.bottomBarSelectedItem == 1) || (!state.isColorTransfer && state.bottomBarSelectedItem == 0) ->
+                        state.bottomBarSelectedItem == 1 ->
                             LightEditPanel(
                                 onChange = { value, index ->
                                     viewModel.onEvent(ImageEditorEvent.BasicPanelSliders(value, index))
                                 },
-                                params = state.imageParams[state.currentIndexOfEditChanges]
+                                params = state.currentImageParams
+                            )
+                        state.bottomBarSelectedItem == 2 ->
+                            ColorEditPanel(
+                                onChange = { value, index ->
+                                    viewModel.onEvent(ImageEditorEvent.ColorPanelSliders(value, index))
+                                },
+                                params = state.currentImageParams
                             )
                     }
                 }

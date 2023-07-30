@@ -105,8 +105,8 @@ fun LightEditPanel(
 
 enum class LightEditPanelSliders(@StringRes val labelResourceId: Int, val bottomBound: Float, val upperBound: Float, val basePoint: Float, val index: Int) {
 
-    ExposureSlider(R.string.exposure, -150f, 150f, 0f,1),
-    ContrastSlider(R.string.contrast, -60f, 60f,0f, 2),
-    GammaSlider(R.string.gamma, 0.01f, 3f,1f, 3),
+    ExposureSlider(R.string.exposure, -150f, 150f, 0f,2),
+    ContrastSlider(R.string.contrast, -60f, 60f,0f, 3),
+    GammaSlider(R.string.gamma, 0.01f, 3f,1f, 4),
 
 }

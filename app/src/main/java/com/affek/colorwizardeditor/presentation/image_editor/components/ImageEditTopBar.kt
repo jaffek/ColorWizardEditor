@@ -11,12 +11,14 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,6 +35,10 @@ fun ImageEditTopBar(
     redoClick : () -> Unit,
     resetClick: () -> Unit,
     clickTopMenu : () -> Unit,
+    clickAcceptChanges : () -> Unit,
+    clickDismissChanges : () -> Unit,
+    isAcceptButtonEnabled: Boolean = false,
+    isDismissButtonEnabled: Boolean = false,
     isDropDownMenuExpanded : Boolean,
     visible : Boolean = true,
     isUndoButtonEnabled: Boolean = false,
@@ -89,6 +95,33 @@ fun ImageEditTopBar(
                             contentDescription = stringResource(id = R.string.reset_changes),
                         )
                     }
+                                       IconButton(
+                        onClick = { clickAcceptChanges() },
+                        enabled = isAcceptButtonEnabled,
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            //contentColor = Color(0xFF02911A),
+                            containerColor = Color(0xFF02911A)
+
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_check_24),
+                            contentDescription = stringResource(id = R.string.accept),
+                        )
+                    }
+                    IconButton(
+                        onClick = { clickDismissChanges() },
+                        enabled = isDismissButtonEnabled,
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            //contentColor = Color(0xFFD30000),
+                            containerColor = Color(0xFFD30000)
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_clear_24),
+                            contentDescription = stringResource(id = R.string.dismiss),
+                        )
+                    }
                     IconButton(
                         onClick = { clickTopMenu() }
                     ) {
@@ -106,9 +139,6 @@ fun ImageEditTopBar(
                                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.dropdown_menu_corner_radius))
                             ),
                         expanded = isDropDownMenuExpanded,
-                        offset = DpOffset(dimensionResource(id = R.dimen.dropdown_menu_horizontal_offset), dimensionResource(
-                            id = R.dimen.dropdown_menu_vertical_offset
-                        )),
                         onDismissRequest = { clickTopMenu() }
                     ) {
                         DropdownMenuItem(

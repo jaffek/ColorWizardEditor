@@ -33,7 +33,7 @@ import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 @Composable
-fun ColorTransferPanel(
+fun ColorEditPanel(
     params: ImageParams,
     onChange : (value: Float, index: Int) -> Unit
 ) {
@@ -47,7 +47,7 @@ fun ColorTransferPanel(
             .verticalScroll(state = rememberScrollState())
     ) {
 
-        enumValues<ColorTransferPanelSliders>().forEachIndexed() {loopIndex, item ->
+        enumValues<ColorEditPanelSliders>().forEachIndexed() {loopIndex, item ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -66,7 +66,7 @@ fun ColorTransferPanel(
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = if(item.index == ColorTransferPanelSliders.ColorTransferIntensity.index) {
+                    text = if(item.index == ColorEditPanelSliders.SaturationSlider.index) {
                         val df = DecimalFormat("0.00")
                         df.roundingMode = RoundingMode.HALF_UP
                         val roundoff = df.format(params.indexedParams[item.index])
@@ -90,7 +90,7 @@ fun ColorTransferPanel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(id = R.dimen.bottom_bar_slider_horizontal_padding))
-                    .conditional(loopIndex == enumValues<ColorTransferPanelSliders>().size - 1) {
+                    .conditional(loopIndex == enumValues<ColorEditPanelSliders>().size - 1) {
                         padding(bottom = 10.dp)
                     },
                 basePoint = item.basePoint
@@ -103,9 +103,9 @@ fun ColorTransferPanel(
 
 
 
-enum class ColorTransferPanelSliders(@StringRes val labelResourceId: Int, val bottomBound: Float, val upperBound: Float, val basePoint: Float, val index: Int) {
+enum class ColorEditPanelSliders(@StringRes val labelResourceId: Int, val bottomBound: Float, val upperBound: Float, val basePoint: Float, val index: Int) {
 
-    ColorTransferIntensity(R.string.intensity, 0f, 2f, 0f,0),
-    ColorTransferExposureCompensation(R.string.exposure_compensation, -100f, 100f, 0f,1),
+    SaturationSlider(R.string.saturation, 0f, 2f, 1f,5),
+
 
 }

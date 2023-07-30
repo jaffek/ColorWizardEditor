@@ -2,7 +2,6 @@
 #include "mat-bitmap-conversion.h"
 
 
-
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_affek_colorwizardeditor_MainActivity_stringFromJNI(
         JNIEnv* env,
@@ -44,17 +43,32 @@ Java_com_affek_colorwizardeditor_data_image_1processing_ColorTransferKt_colorTra
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_affek_colorwizardeditor_data_image_1processing_LightEditingKt_colorTransferIntenisty(
+Java_com_affek_colorwizardeditor_data_image_1processing_ColorTransferKt_colorTransferIntensity(
         JNIEnv *env,
         jclass clazz,
         jobject source_bitmap,
         jobject color_bitmap,
         jobject final_bitmap,
-        jfloat color_intensity) {
+        jfloat color_intensity,
+        jfloat exposure_compensation) {
+
+
 
     Mat src, color;
     bitmapToMat(env, source_bitmap, src, false);
     bitmapToMat(env, color_bitmap, color, false);
-    colorTransferIntensity(src, color, color_intensity);
+    colorTransferIntensity(src, color, color_intensity, exposure_compensation);
+    matToBitmap(env, src, final_bitmap, false);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_affek_colorwizardeditor_data_image_1processing_ColorEditKt_colorEdit(JNIEnv *env,
+                                                                              jclass clazz,
+                                                                              jobject source_bitmap,
+                                                                              jobject final_bitmap,
+                                                                              jfloat saturation) {
+    Mat src;
+    bitmapToMat(env, source_bitmap, src, false);
+    colorEdit(src, saturation);
     matToBitmap(env, src, final_bitmap, false);
 }

@@ -27,6 +27,7 @@ fun ImageEditBottomBar(
     items: List<ImageEditBottomBarItems>,
     selectedIndex: Int,
     isSelected: Boolean,
+    isColorTransfer: Boolean,
     visible: Boolean = true,
     onClick: (Int, Boolean) -> Unit,
     divider : @Composable() () -> Unit = {}
@@ -37,7 +38,7 @@ fun ImageEditBottomBar(
                 .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             CustomScrollableTabRow(
-                selectedTabIndex = if (isSelected) selectedIndex else -1,
+                selectedTabIndex = if (!isSelected) -1 else { if(isColorTransfer) selectedIndex else selectedIndex - 1 },
                 minTabWidth = dimensionResource(id = R.dimen.bottom_bar_tab_min_height),
                 edgePadding = dimensionResource(id = R.dimen.bottom_bar_edge_padding),
                 divider = divider,
@@ -47,14 +48,14 @@ fun ImageEditBottomBar(
                 modifier = Modifier
                     .navigationBarsPadding()
             ) {
-                items.forEachIndexed() { index, item ->
+                items.forEach() { item ->
                     CustomTab(
-                        selected = index == selectedIndex && isSelected,
+                        selected = item.index == selectedIndex && isSelected,
                         onClick = {
-                            if (index == selectedIndex && isSelected)
-                                onClick(index, false)
+                            if (item.index == selectedIndex && isSelected)
+                                onClick(item.index, false)
                             else
-                                onClick(index, true)
+                                onClick(item.index, true)
                         },
                         icon = {
                             Icon(

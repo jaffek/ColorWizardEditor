@@ -29,6 +29,10 @@
     <string name="additional_options">Additional options</string>
     <string name="reset_changes">Reset changes</string>
     <string name="intensity">Intensity</string>
+    <string name="accept">Accept</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="exposure_compensation">Exposure compensation</string>
+    <string name="saturation">Saturation</string>
 
 
 

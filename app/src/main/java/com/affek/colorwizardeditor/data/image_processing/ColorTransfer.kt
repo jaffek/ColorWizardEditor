@@ -17,4 +17,14 @@ suspend fun colorTransfer(sourceImage: Bitmap?, colorImage: Bitmap?): Bitmap = w
     finalBitmap
 }
 
+
+fun colorTransferIntensity(sourceImage: Bitmap?, colorImage: Bitmap?, colorIntensity: Float, exposureCompensation: Float): Bitmap{
+
+    val finalBitmap = sourceImage!!.copy(sourceImage.config, true)
+    colorTransferIntensity(sourceImage, colorImage!!, finalBitmap, colorIntensity, exposureCompensation)
+
+    return finalBitmap
+}
 external fun colorTransferC(sourceBitmap: Bitmap, colorBitmap: Bitmap, finalBitmap: Bitmap)
+
+external fun colorTransferIntensity(sourceBitmap: Bitmap, colorBitmap: Bitmap, finalBitmap: Bitmap, colorIntensity: Float, exposureCompensation: Float)
