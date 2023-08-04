@@ -63,7 +63,7 @@ class ImageEditorViewModel @Inject constructor(
                     currentState.copy(
                         calculatedImage = colorImage,
                         isLoading = false,
-                        historyImages = listOf(sourceImage!!, colorImage!!),
+                        historyImages = listOf(sourceImage!!),
                         currentImageParams = tempValues,
                         isBottomBarItemSelected = true,
                         bottomBarSelectedItem = ImageEditBottomBarItems.ColorTransferEditor.index,
